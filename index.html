@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Odoo Education — Powered by Otizim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #017e84;
+    --accent-light: #e6f4f5;
+    --accent-dark: #015e63;
+    --text: #1D1D1F;
+    --text-muted: #6e6e73;
+    --text-light: #aeaeb2;
+    --bg: #FFFFFF;
+    --card: #FAFAFA;
+    --border: #EBEBEB;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.06);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.06), 0 16px 48px rgba(0,0,0,0.08);
+    --radius: 20px;
+    --radius-sm: 12px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Manrope', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── STICKY HEADER ── */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border-bottom: 1px solid rgba(235,235,235,0.8);
+    transition: box-shadow 0.3s ease;
+  }
+  header.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.07); }
+
+  .logo svg { width: 150px; height: auto; display: block; }
+
+  .btn-export {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 10px rgba(1,126,132,0.25);
+  }
+  .btn-export:hover {
+    background: var(--accent-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(1,126,132,0.35);
+  }
+  .btn-export svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ── SECTIONS ── */
+  section { padding: 100px 40px; max-width: 1180px; margin: 0 auto; }
+
+  /* ── HERO ── */
+  .hero-section {
+    padding-top: 160px;
+    padding-bottom: 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent-light);
+    color: var(--accent);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .hero-badge span { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; display: inline-block; }
+
+  .hero-title {
+    font-size: clamp(34px, 4.5vw, 56px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: 22px;
+  }
+  .hero-title em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-subtitle {
+    font-size: 17px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-weight: 400;
+    margin-bottom: 36px;
+    max-width: 480px;
+  }
+
+  .hero-info-box {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 22px;
+    box-shadow: var(--shadow-sm);
+  }
+  .hero-info-box .info-icon {
+    width: 36px; height: 36px;
+    background: var(--accent-light);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .hero-info-box .info-icon svg { width: 18px; height: 18px; color: var(--accent); }
+  .hero-info-box p { font-size: 14px; color: var(--text-muted); font-weight: 500; line-height: 1.5; }
+  .hero-info-box strong { color: var(--text); font-weight: 700; }
+
+  .hero-visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-visual-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 30px;
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+  }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .stat-item {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease;
+  }
+  .stat-item:hover { transform: translateY(-3px); }
+  .stat-num { font-size: 32px; font-weight: 800; color: var(--accent); letter-spacing: -0.03em; }
+  .stat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-top: 4px; }
+  .stat-item.wide { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; }
+  .stat-item.wide .stat-num { font-size: 24px; }
+
+  /* ── SECTION HEADER ── */
+  .section-tag {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: clamp(26px, 3.5vw, 42px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+  .section-subtitle {
+    font-size: 16px;
+    color: var(--text-muted);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 56px;
+  }
+
+  /* ── BENTO GRID ── */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: minmax(180px, auto);
+    gap: 16px;
+  }
+
+  .bento-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    position: relative;
+  }
+  .bento-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .bento-card.col-7 { grid-column: span 7; }
+  .bento-card.col-5 { grid-column: span 5; }
+  .bento-card.col-4 { grid-column: span 4; }
+  .bento-card.col-8 { grid-column: span 8; }
+  .bento-card.col-6 { grid-column: span 6; }
+  .bento-card.col-12 { grid-column: span 12; }
+  .bento-card.accent-card { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .bento-problem {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #c0392b;
+    background: #fef0ef;
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  .bento-card.accent-card .bento-problem {
+    color: rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.15);
+  }
+
+  .bento-card-title {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .bento-card.accent-card .bento-card-title { color: #fff; }
+
+  .bento-card-problem {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .bento-card.accent-card .bento-card-problem { color: rgba(255,255,255,0.75); }
+
+  .bento-solution-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-light);
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+  .bento-card.accent-card .bento-solution-label {
+    color: var(--accent);
+    background: rgba(255,255,255,0.9);
+  }
+
+  .bento-card-solution {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.65;
+    font-weight: 500;
+  }
+  .bento-card.accent-card .bento-card-solution { color: rgba(255,255,255,0.92); }
+
+  .bento-card .bento-deco {
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    opacity: 0.5;
+  }
+  .bento-card.accent-card .bento-deco { background: rgba(255,255,255,0.1); opacity: 1; }
+
+  /* integration pills */
+  .integration-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .pill {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
+  }
+  .bento-card.accent-card .pill { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #fff; }
+
+  /* ── PRICING ── */
+  .pricing-note {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 40px;
+    box-shadow: var(--shadow-sm);
+  }
+  .pricing-note strong { color: var(--text); }
+  .pricing-note .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; flex-shrink: 0; }
+
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
+
+  .pricing-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 30px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+  }
+  .pricing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+  }
+  .pricing-card.featured {
+    background: #fff;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 24px rgba(1,126,132,0.12), var(--shadow-md);
+    transform: scale(1.02);
+    z-index: 2;
+  }
+  .pricing-card.featured:hover { transform: scale(1.02) translateY(-5px); }
+
+  .pricing-badge {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border-radius: 100px;
+    white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(1,126,132,0.3);
+  }
+
+  .pricing-tier { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+  .pricing-name { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; color: var(--text); margin-bottom: 6px; }
+  .pricing-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 8px; }
+  .pricing-price .amount { font-size: 44px; font-weight: 800; letter-spacing: -0.04em; color: var(--accent); }
+  .pricing-price .period { font-size: 16px; color: var(--text-muted); font-weight: 500; }
+  .pricing-desc { font-size: 13.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 28px; font-weight: 400; }
+
+  .pricing-divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  .pricing-section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+
+  .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+  .pricing-features li { font-size: 14px; color: var(--text); font-weight: 500; display: flex; align-items: flex-start; gap: 10px; line-height: 1.4; }
+  .pricing-features li::before {
+    content: '';
+    width: 16px; height: 16px;
+    background: var(--accent-light);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 1px;
+    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.5 8L6.5 11L12.5 5' stroke='%23017e84' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-size: contain;
+  }
+  .pricing-limit {
+    background: #fef9ef;
+    border: 1px solid #f5e6c8;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #9a7230;
+    font-weight: 500;
+  }
+
+  /* ── ADDONS ── */
+  .addons-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+  .addon-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 26px 22px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .addon-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+  .addon-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent);
+    border-radius: 3px 3px 0 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .addon-card:hover::before { transform: scaleX(1); }
+
+  .addon-icon {
+    width: 44px; height: 44px;
+    background: var(--accent-light);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .addon-icon svg { width: 22px; height: 22px; color: var(--accent); }
+  .addon-name { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; line-height: 1.3; }
+  .addon-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
+  .addon-price { font-size: 18px; font-weight: 800; color: var(--accent); }
+  .addon-price span { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+
+  /* ── REVEAL ANIMATION ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1180px;
+    margin: 0 auto 40px;
+  }
+  footer p { font-size: 13px; color: var(--text-muted); }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    @page { size: A4; margin: 15mm 15mm 15mm 15mm; }
+    header { position: static; background: white; backdrop-filter: none; border-bottom: 1px solid var(--border); }
+    .btn-export { display: none; }
+    .hero-section { padding-top: 20px; grid-template-columns: 1fr; gap: 30px; }
+    .hero-visual { display: none; }
+    section { padding: 40px 0; page-break-inside: avoid; }
+    .bento-grid { grid-template-columns: repeat(2, 1fr); }
+    .bento-card { grid-column: span 1 !important; page-break-inside: avoid; }
+    .pricing-grid { grid-template-columns: repeat(3, 1fr); }
+    .pricing-card.featured { transform: none; }
+    .addons-grid { grid-template-columns: repeat(2, 1fr); }
+    .reveal { opacity: 1; transform: none; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    footer { page-break-inside: avoid; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    header { padding: 14px 20px; }
+    .hero-section { grid-template-columns: 1fr; padding: 130px 20px 60px; gap: 40px; }
+    .hero-visual { display: none; }
+    section { padding: 70px 20px; }
+    .bento-grid { grid-template-columns: 1fr 1fr; }
+    .bento-card.col-7, .bento-card.col-5, .bento-card.col-4, .bento-card.col-8,
+    .bento-card.col-6, .bento-card.col-12 { grid-column: span 2; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .pricing-card.featured { transform: none; }
+    .addons-grid { grid-template-columns: 1fr 1fr; }
+    footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px 20px; }
+  }
+  @media (max-width: 560px) {
+    .bento-grid { grid-template-columns: 1fr; }
+    .bento-card.col-7, .bento-card.col-5, .bento-card.col-4, .bento-card.col-8,
+    .bento-card.col-6, .bento-card.col-12 { grid-column: span 1; }
+    .addons-grid { grid-template-columns: 1fr; }
+    .stat-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- STICKY HEADER -->
+<header id="site-header">
+  <div class="logo">
+    <svg width="1007" height="188" viewBox="0 0 1007 188" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clip-path="url(#clip0_576_350)">
+        <path d="M316.192 32.1558H258.57V0H418.498V32.1558H361.149V187.961H316.192V32.1558Z" fill="#4A5561"/>
+        <path d="M520.998 160.458L618.409 32.1558H523.897V21.3302L545.121 0H673.755V27.2287L576.344 155.539H675.485V166.67L654.262 188H520.998V160.497V160.458Z" fill="#4A5561"/>
+        <path d="M791.149 0H855.139L901.257 134.357L946.759 0H1007V187.961H966.361V48.9505H965.512L918.272 187.961H882.27L833.565 48.9505H832.404V187.961H791.188V0H791.149Z" fill="#4A5561"/>
+        <path d="M488.66 187.961H472.378C461.225 176.751 454.966 170.469 443.812 159.259V0H460.102C471.256 11.2095 477.506 17.4918 488.66 28.7013V187.922V187.961Z" fill="#4A5561"/>
+        <path d="M751.088 187.961H734.806C723.652 176.751 717.401 170.469 706.248 159.259V0H722.53L751.088 28.7013V187.922V187.961Z" fill="#4A5561"/>
+        <path d="M135.727 0H51.0982C31.1453 20.0533 19.9529 31.2628 0 51.3162V136.41C19.9529 156.463 31.1453 167.712 51.0982 187.765H135.766C155.719 167.712 166.911 156.463 186.864 136.41V51.3162C166.872 31.2628 155.68 20.0533 135.727 0ZM158.618 123.579C144.682 137.577 136.888 145.41 122.96 159.416H63.8728C49.9369 145.41 42.1428 137.577 28.2147 123.579V64.1942C42.1428 50.1882 49.9369 42.3548 63.8728 28.3567H122.96C136.888 42.3548 144.682 50.1882 158.618 64.1942V123.579Z" fill="#017E84"/>
+        <path d="M250.658 69.8185H232.21C226.692 75.3645 223.566 78.5056 218.048 84.0516V102.593C223.566 108.139 226.692 111.28 232.21 116.826H250.658C256.177 111.28 259.302 108.139 264.82 102.593V84.0516C259.302 78.5056 256.177 75.3645 250.658 69.8185Z" fill="#017E84"/>
+        <path d="M109.18 54.3007H77.9962C68.6199 63.7242 63.3666 69.0038 54.0293 78.3882V109.729C63.4056 119.153 68.6589 124.425 77.9962 133.817H109.18C118.557 124.393 123.802 119.114 133.147 109.729V78.3882C123.771 68.9647 118.518 63.685 109.18 54.3007Z" fill="#017E84"/>
+      </g>
+      <defs>
+        <clipPath id="clip0_576_350">
+          <rect width="1007" height="188" fill="white"/>
+        </clipPath>
+      </defs>
+    </svg>
+  </div>
+  <button class="btn-export" onclick="window.print()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Экспорт в PDF
+  </button>
+</header>
+
+<!-- HERO -->
+<div class="hero-section reveal">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span></span>
+      ERP нового поколения
+    </div>
+    <h1 class="hero-title">
+      Полный финансовый <em>контроль</em> и порядок в вашем учебном центре.
+    </h1>
+    <p class="hero-subtitle">
+      Без «налога на учеников», без хаоса в Excel и без потерянных оплат. Система, которая работает на вас — а не наоборот.
+    </p>
+    <div class="hero-info-box">
+      <div class="info-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#017e84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <p><strong>Внедрение и перенос данных</strong> рассчитываются индивидуально — разовый платеж. Подберём решение под ваши задачи.</p>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-visual-card">
+      <div class="stat-grid">
+        <div class="stat-item">
+          <div class="stat-num">0%</div>
+          <div class="stat-label">Теневых оплат</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">3x</div>
+          <div class="stat-label">Рост конверсии лидов</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Аудит транзакций</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">$75</div>
+          <div class="stat-label">Старт / месяц</div>
+        </div>
+        <div class="stat-item wide">
+          <div>
+            <div class="stat-num">Безлимит</div>
+            <div class="stat-label">Порталов учеников и Telegram-уведомлений</div>
+          </div>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#017e84" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.58 1.25h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.02z"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADVANTAGES -->
+<section id="advantages">
+  <div class="reveal">
+    <div class="section-tag">Преимущества</div>
+    <h2 class="section-title">Ваши боли — наши решения</h2>
+    <p class="section-subtitle">Пять ключевых проблем учебных центров, которые Otizim закрывает системно.</p>
+  </div>
+
+  <div class="bento-grid">
+
+    <!-- Card 1: wide -->
+    <div class="bento-card col-7 reveal" style="transition-delay: 0.05s">
+      <div class="bento-problem">Проблема</div>
+      <h3 class="bento-card-title">Кассовые разрывы и теневые платежи</h3>
+      <p class="bento-card-problem">Оплаты наличными сложно контролировать. Ученик отдал деньги — запись затерялась.</p>
+      <div class="bento-solution-label">Решение Otizim</div>
+      <p class="bento-card-solution">Жёсткий финансовый аудит. Администратор проводит чек, но не может удалить или изменить его задним числом.</p>
+      <div class="integration-pills">
+        <span class="pill">Click</span>
+        <span class="pill">Payme</span>
+        <span class="pill">Uzum</span>
+      </div>
+      <div class="bento-deco"></div>
+    </div>
+
+    <!-- Card 2 accent -->
+    <div class="bento-card col-5 accent-card reveal" style="transition-delay: 0.1s">
+      <div class="bento-problem">Проблема</div>
+      <h3 class="bento-card-title">Иллюзия контроля (Турникеты и FaceID)</h3>
+      <p class="bento-card-problem">Студент оплатил один дешёвый курс, а турникет пропускает его на все предметы.</p>
+      <div class="bento-solution-label">Решение Otizim</div>
+      <p class="bento-card-solution">Умная сквозная проверка. База знает, куда идёт ученик, и сигнализирует, если активной подписки нет.</p>
+      <div class="bento-deco"></div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="bento-card col-4 reveal" style="transition-delay: 0.15s">
+      <div class="bento-problem">Проблема</div>
+      <h3 class="bento-card-title">Потерянные лиды</h3>
+      <p class="bento-card-problem">Студент пришёл на пробный урок, ушёл «подумать» — и о нём забыли.</p>
+      <div class="bento-solution-label">Решение Otizim</div>
+      <p class="bento-card-solution">Автоматическая воронка. CRM ставит задачу менеджеру перезвонить — ни один контакт не теряется.</p>
+      <div class="bento-deco"></div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="bento-card col-4 reveal" style="transition-delay: 0.2s">
+      <div class="bento-problem">Проблема</div>
+      <h3 class="bento-card-title">Родители и Telegram</h3>
+      <p class="bento-card-problem">Родители не хотят скачивать новые приложения ради уведомлений.</p>
+      <div class="bento-solution-label">Решение Otizim</div>
+      <p class="bento-card-solution">Уведомления об уроках, задолженностях и ссылки на оплату — прямо в привычный Telegram-бот.</p>
+      <div class="bento-deco"></div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="bento-card col-4 reveal" style="transition-delay: 0.25s">
+      <div class="bento-problem">Проблема</div>
+      <h3 class="bento-card-title">Сложность обучения сотрудников</h3>
+      <p class="bento-card-problem">Бухгалтеры боятся переходить на новые программы и держатся за Excel.</p>
+      <div class="bento-solution-label">Решение Otizim</div>
+      <p class="bento-card-solution">Модуль e-learning прямо в базе. Видеоинструкции для сотрудников, строгий интерфейс без лишнего шума.</p>
+      <div class="bento-deco"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="reveal">
+    <div class="section-tag">Тарифы</div>
+    <h2 class="section-title">Прозрачные цены без сюрпризов</h2>
+    <p class="section-subtitle">Вы платите только за рабочие места сотрудников. Портал учеников и Telegram-уведомления — безлимитны и бесплатны.</p>
+  </div>
+
+  <div class="pricing-note reveal">
+    <div class="dot"></div>
+    <p><strong>Важно:</strong> Портал для учеников и Telegram-уведомления — безлимитны. Вы платите только за аккаунты сотрудников.</p>
+  </div>
+
+  <div class="pricing-grid">
+
+    <!-- START -->
+    <div class="pricing-card reveal" style="transition-delay: 0.05s">
+      <div class="pricing-tier">Тариф</div>
+      <div class="pricing-name">Старт</div>
+      <div class="pricing-price">
+        <span class="amount">$75</span>
+        <span class="period">/ мес</span>
+      </div>
+      <p class="pricing-desc">Для небольших центров, которые делают первый шаг к автоматизации.</p>
+      <hr class="pricing-divider">
+      <div class="pricing-section-label">Команда</div>
+      <ul class="pricing-features">
+        <li>3 рабочих места</li>
+        <li>Доп. место: $25/мес</li>
+        <li>1 филиал</li>
+        <li>10 ГБ хранилища</li>
+      </ul>
+      <hr class="pricing-divider">
+      <div class="pricing-section-label">Функционал</div>
+      <ul class="pricing-features">
+        <li>CRM и расписание</li>
+        <li>Касса и портал ученика</li>
+        <li>Шлюзы Click / Payme</li>
+      </ul>
+      <hr class="pricing-divider">
+      <div class="pricing-limit">Нет автоматического расчёта ЗП и складского учёта</div>
+    </div>
+
+    <!-- BUSINESS (featured) -->
+    <div class="pricing-card featured reveal" style="transition-delay: 0.1s">
+      <div class="pricing-badge">Популярный</div>
+      <div class="pricing-tier">Тариф</div>
+      <div class="pricing-name">Бизнес</div>
+      <div class="pricing-price">
+        <span class="amount">$145</span>
+        <span class="period">/ мес</span>
+      </div>
+      <p class="pricing-desc">Оптимальный выбор для активно растущих учебных центров с командой.</p>
+      <hr class="pricing-divider">
+      <div class="pricing-section-label">Команда</div>
+      <ul class="pricing-features">
+        <li>6 рабочих мест</li>
+        <li>Доп. место: $22/мес</li>
+        <li>1 филиал</li>
+        <li>25 ГБ хранилища</li>
+      </ul>
+      <hr class="pricing-divider">
+      <div class="pricing-section-label">Всё из Старта, плюс</div>
+      <ul class="pricing-features">
+        <li>Автоматический расчёт ЗП</li>
+        <li>Складской учёт</li>
+        <li>Финансовая аналитика</li>
+      </ul>
+    </div>
+
+    <!-- PRO -->
+    <div class="pricing-card reveal" style="transition-delay: 0.15s">
+      <div class="pricing-tier">Тариф</div>
+      <div class="pricing-name">Про</div>
+      <div class="pricing-price">
+        <span class="amount">$250</span>
+        <span class="period">/ мес</span>
+      </div>
+      <p class="pricing-desc">Для сетей и крупных центров с несколькими филиалами и большой командой.</p>
+      <hr class="pricing-divider">
+      <div class="pricing-section-label">Команда</div>
+      <ul class="pricing-features">
+        <li>12 рабочих мест</li>
+        <li>Доп. место: $20/мес</li>
+        <li>Безлимит филиалов</li>
+        <li>100 ГБ хранилища</li>
+      </ul>
+      <hr class="pricing-divider">
+      <div class="pricing-section-label">Всё из Бизнеса, плюс</div>
+      <ul class="pricing-features">
+        <li>Мультифилиальность</li>
+        <li>P&amp;L аналитика</li>
+        <li>IP-телефония</li>
+        <li>HR-модуль</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ADD-ONS -->
+<section id="addons">
+  <div class="reveal">
+    <div class="section-tag">Модули</div>
+    <h2 class="section-title">Дополнительные модули</h2>
+    <p class="section-subtitle">Расширьте систему под ваши задачи — подключайте только то, что нужно.</p>
+  </div>
+
+  <div class="addons-grid">
+
+    <div class="addon-card reveal" style="transition-delay: 0.05s">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.58 1.25h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.02z"/></svg>
+      </div>
+      <div class="addon-name">Telegram &amp; SMS шлюз</div>
+      <div class="addon-desc">Рассылка через Eskiz. Уведомления, долги, ссылки на оплату — прямо в мессенджер.</div>
+      <div class="addon-price">+$10 <span>/ мес</span></div>
+    </div>
+
+    <div class="addon-card reveal" style="transition-delay: 0.1s">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </div>
+      <div class="addon-name">LMS-кабинет</div>
+      <div class="addon-desc">Тесты, видеоуроки и домашние задания. Полноценное онлайн-обучение внутри системы.</div>
+      <div class="addon-price">+$15 <span>/ мес</span></div>
+    </div>
+
+    <div class="addon-card reveal" style="transition-delay: 0.15s">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </div>
+      <div class="addon-name">E-commerce магазин</div>
+      <div class="addon-desc">Продавайте курсы и товары онлайн. Интеграция с платёжными шлюзами из коробки.</div>
+      <div class="addon-price">+$10 <span>/ мес</span></div>
+    </div>
+
+    <div class="addon-card reveal" style="transition-delay: 0.2s">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      </div>
+      <div class="addon-name">Доп. пространство</div>
+      <div class="addon-desc">+20 ГБ облачного хранилища для медиаконтента, документов и отчётов.</div>
+      <div class="addon-price">+$10 <span>/ мес</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="reveal">
+  <div class="logo" style="opacity: 0.5;">
+    <svg width="1007" height="188" viewBox="0 0 1007 188" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100px;height:auto;">
+      <g clip-path="url(#clip0_footer)">
+        <path d="M316.192 32.1558H258.57V0H418.498V32.1558H361.149V187.961H316.192V32.1558Z" fill="#4A5561"/>
+        <path d="M520.998 160.458L618.409 32.1558H523.897V21.3302L545.121 0H673.755V27.2287L576.344 155.539H675.485V166.67L654.262 188H520.998V160.497V160.458Z" fill="#4A5561"/>
+        <path d="M791.149 0H855.139L901.257 134.357L946.759 0H1007V187.961H966.361V48.9505H965.512L918.272 187.961H882.27L833.565 48.9505H832.404V187.961H791.188V0H791.149Z" fill="#4A5561"/>
+        <path d="M488.66 187.961H472.378C461.225 176.751 454.966 170.469 443.812 159.259V0H460.102C471.256 11.2095 477.506 17.4918 488.66 28.7013V187.922V187.961Z" fill="#4A5561"/>
+        <path d="M751.088 187.961H734.806C723.652 176.751 717.401 170.469 706.248 159.259V0H722.53L751.088 28.7013V187.922V187.961Z" fill="#4A5561"/>
+        <path d="M135.727 0H51.0982C31.1453 20.0533 19.9529 31.2628 0 51.3162V136.41C19.9529 156.463 31.1453 167.712 51.0982 187.765H135.766C155.719 167.712 166.911 156.463 186.864 136.41V51.3162C166.872 31.2628 155.68 20.0533 135.727 0ZM158.618 123.579C144.682 137.577 136.888 145.41 122.96 159.416H63.8728C49.9369 145.41 42.1428 137.577 28.2147 123.579V64.1942C42.1428 50.1882 49.9369 42.3548 63.8728 28.3567H122.96C136.888 42.3548 144.682 50.1882 158.618 64.1942V123.579Z" fill="#017E84"/>
+        <path d="M250.658 69.8185H232.21C226.692 75.3645 223.566 78.5056 218.048 84.0516V102.593C223.566 108.139 226.692 111.28 232.21 116.826H250.658C256.177 111.28 259.302 108.139 264.82 102.593V84.0516C259.302 78.5056 256.177 75.3645 250.658 69.8185Z" fill="#017E84"/>
+        <path d="M109.18 54.3007H77.9962C68.6199 63.7242 63.3666 69.0038 54.0293 78.3882V109.729C63.4056 119.153 68.6589 124.425 77.9962 133.817H109.18C118.557 124.393 123.802 119.114 133.147 109.729V78.3882C123.771 68.9647 118.518 63.685 109.18 54.3007Z" fill="#017E84"/>
+      </g>
+      <defs><clipPath id="clip0_footer"><rect width="1007" height="188" fill="white"/></clipPath></defs>
+    </svg>
+  </div>
+  <p>© 2025 Otizim. Odoo Education — ERP нового поколения для учебных центров.</p>
+</footer>
+
+<script>
+  // Sticky header shadow on scroll
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
